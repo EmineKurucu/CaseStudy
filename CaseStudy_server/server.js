@@ -8,7 +8,7 @@ const PORT = process.env.PORT || 5000;
 app.use(cors({
     origin: [
         "http://localhost:3000",
-        "https://case-study-olive.vercel.app"  // Gerçek Vercel URL'niz
+        "https://case-study-5mogyyr4x-eminekurucus-projects.vercel.app"  // Gerçek Vercel URL'niz
     ],
     credentials: true
 }));
