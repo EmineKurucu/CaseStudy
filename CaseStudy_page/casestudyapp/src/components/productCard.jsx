@@ -1,159 +1,70 @@
-import React, { useEffect, useState, useRef } from 'react';
-import axios from 'axios';
-import ProductCard from './productCard';
-import './productList.css';
+import React, { useState } from 'react';
+import './productCard.css';
 
-const ProductList = () => {
-  const [products, setProducts] = useState([]);
-  const [filteredProducts, setFilteredProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+const ProductCard = ({ product }) => {
+  const {
+    name,
+    priceUSD,
+    popularityScore,
+    displayScore,
+    images = {},
+    colorOptions = []
+  } = product;
 
-  const [popularityFilter, setPopularityFilter] = useState('all');
-  const [priceFilter, setPriceFilter] = useState('all');
-
-  const scrollContainerRef = useRef(null);
-
-  // API URL'sini environment variable'dan al, yoksa fallback kullan
-  const API_URL = import.meta.env.VITE_API_URL || 'https://case-study-backend.onrender.com';
-
-  useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        setLoading(true);
-        setError(null);
-        
-        console.log('API URL:', API_URL); // Debug için
-        
-        const response = await axios.get(`${API_URL}/products`, {
-          timeout: 10000, // 10 saniye timeout
-          headers: {
-            'Content-Type': 'application/json',
-          }
-        });
-        
-        console.log('API Response:', response.data); // Debug için
-        
-        if (response.data && Array.isArray(response.data)) {
-          setProducts(response.data);
-          setFilteredProducts(response.data);
-        } else {
-          throw new Error('Invalid data format received');
-        }
-      } catch (err) {
-        console.error('API Error:', err);
-        setError(err.response?.data?.message || err.message || 'Veriler alınamadı');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchProducts();
-  }, [API_URL]);
-
-  useEffect(() => {
-    let updated = [...products];
-
-    if (popularityFilter !== 'all') {
-      updated = updated.filter(product => {
-        const stars = product.displayScore || (product.popularityScore * 5);
-        if (popularityFilter === '0-2') return stars >= 0 && stars < 2;
-        if (popularityFilter === '2-4') return stars >= 2 && stars < 4;
-        if (popularityFilter === '4+') return stars >= 4;
-        return true;
-      });
-    }
-
-    if (priceFilter !== 'all') {
-      updated = updated.filter(product => {
-        const price = parseFloat(product.priceUSD);
-        if (priceFilter === '0-500') return price >= 0 && price <= 500;
-        if (priceFilter === '500-800') return price > 500 && price <= 800;
-        if (priceFilter === '800+') return price > 800;
-        return true;
-      });
-    }
-
-    setFilteredProducts(updated);
-  }, [popularityFilter, priceFilter, products]);
-
-  const scrollLeft = () => {
-    scrollContainerRef.current.scrollBy({
-      left: -300,
-      behavior: 'smooth',
-    });
+  // Renk isimleri ve kodları eşleştirmesi
+  const colorMap = {
+    'yellow': { name: 'Yellow Gold', code: '#E6CA97' },
+    'white': { name: 'White Gold', code: '#D9D9D9' },
+    'rose': { name: 'Rose Gold', code: '#E1A4A9' }
   };
+  
+  const availableColors = Object.keys(images).filter(color => colorMap[color]);
+  const [selectedColor, setSelectedColor] = useState(availableColors[0] || 'yellow');
+  
+  const imageUrl = images[selectedColor] || 'https://via.placeholder.com/150';
 
-  const scrollRight = () => {
-    scrollContainerRef.current.scrollBy({
-      left: 300,
-      behavior: 'smooth',
-    });
-  };
-
-  if (error) {
-    return (
-      <div className="product-list-wrapper">
-        <div className="heading">Product List</div>
-        <div className="error-message">
-          <p>❌ Hata: {error}</p>
-          <p>Backend URL: {API_URL}</p>
-          <button onClick={() => window.location.reload()}>Tekrar Dene</button>
-        </div>
-      </div>
-    );
-  }
+  // Puan hesaplama
+  const rating = displayScore ?? (popularityScore * 5);
+  const fullStars = Math.floor(rating);
+  const halfStar = rating % 1 >= 0.5;
+  const emptyStars = 5 - fullStars - (halfStar ? 1 : 0);
 
   return (
-    <div className="product-list-wrapper">
-      <div className="heading">Product List</div>
-
-      <div className="filters">
-        <div>
-          <label>Popularity:</label>
-          <select value={popularityFilter} onChange={(e) => setPopularityFilter(e.target.value)}>
-            <option value="all">All</option>
-            <option value="0-2">0 - 2 stars</option>
-            <option value="2-4">2 - 4 stars</option>
-            <option value="4+">4+ stars</option>
-          </select>
-        </div>
-
-        <div>
-          <label>Price (USD):</label>
-          <select value={priceFilter} onChange={(e) => setPriceFilter(e.target.value)}>
-            <option value="all">All</option>
-            <option value="0-500">$0 - $500</option>
-            <option value="500-800">$500 - $800</option>
-            <option value="800+">$800+</option>
-          </select>
-        </div>
+    <div className="product-card">
+      <div className="product-image">
+        <img src={imageUrl} alt={`${name} - ${selectedColor}`} />
       </div>
 
-      {loading ? (
-        <div className="loading-message">
-          <p>⏳ Ürünler yükleniyor...</p>
-          <p>Backend: {API_URL}</p>
-        </div>
-      ) : (
-        <div className="product-carousel">
-          <button className="scroll-button left" onClick={scrollLeft}>&lt;</button>
+      <div className="product-info">
+        <h3 className="product-title">{name}</h3>
 
-          <div className="product-scroll-container" ref={scrollContainerRef}>
-            {filteredProducts.length > 0 ? (
-              filteredProducts.map((product, index) => (
-                <ProductCard key={product.id || product.name || index} product={product} />
-              ))
-            ) : (
-              <p>No products match your filters.</p>
-            )}
-          </div>
-
-          <button className="scroll-button right" onClick={scrollRight}>&gt;</button>
+        <p className="product-price">${Number(priceUSD).toFixed(2)}</p>
+        <div className="color-options">
+          {availableColors.map((color) => (
+            <div
+              key={color}
+              className={`color-option ${selectedColor === color ? 'selected' : ''}`}
+              style={{ backgroundColor: colorMap[color]?.code || color }}
+              onClick={() => setSelectedColor(color)}
+              title={colorMap[color]?.name || color}
+            />
+          ))}
         </div>
-      )}
+        <div className="selected-color-name">{colorMap[selectedColor]?.name || selectedColor}</div>
+
+        <div className="rating">
+          {[...Array(fullStars)].map((_, i) => (
+            <span key={`full-${i}`} className="star filled">★</span>
+          ))}
+          {halfStar && <span className="star half">★</span>}
+          {[...Array(emptyStars)].map((_, i) => (
+            <span key={`empty-${i}`} className="star">☆</span>
+          ))}
+          <span className="rating-text">({rating.toFixed(1)})</span>
+        </div>
+      </div>
     </div>
   );
 };
 
-export default ProductList;
+export default ProductCard;

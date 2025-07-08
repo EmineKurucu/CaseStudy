@@ -4,18 +4,12 @@ const cors = require("cors");
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// CORS ayarını düzelt - gerçek URL'nizi yazın
-app.use(cors({
-    origin: [
-        "http://localhost:3000",
-        "https://case-study-5mogyyr4x-eminekurucus-projects.vercel.app"  // Gerçek Vercel URL'niz
-    ],
-    credentials: true
-}));
+// CORS middleware'i EN ÜSTE KOYUN
+app.use(cors());
 
 app.use(express.json());
 
-//Routes
+// Routes
 const productRoutes = require("./routes/routes");
 const errorHandler = require("./middlewares/errorHandler");
 app.use("/products", productRoutes);
