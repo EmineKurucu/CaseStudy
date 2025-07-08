@@ -3,7 +3,7 @@ const axios = require("axios");
 const path = require("path");
 
 // Altın fiyatlarını güncel almak için goldapi.io'dan alınan API ve URL
-const GOLD_API_KEY = "goldapi-kn2o8vsmctge21t-io";
+const GOLD_API_KEY = "goldapi-kn2o8v19mcub24mw-io";
 const GOLD_API_URL = "https://www.goldapi.io/api/XAU/USD";
 
 // Altın fiyatı hesaplama
