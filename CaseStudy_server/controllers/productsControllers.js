@@ -27,7 +27,7 @@ const readProducts = () =>{
 const addPriceAndDisplayScore = (products, goldPrice) => {
   return products.map(p => {
     const priceUSD = (p.popularityScore + 1) * p.weight * goldPrice;
-    const displayScore = ((p.popularityScore / 100) * 5).toFixed(1);
+    const displayScore = (p.popularityScore * 5).toFixed(1); // DÜZELTİLDİ
     return {
       ...p,
       priceUSD: priceUSD.toFixed(2),
@@ -35,6 +35,7 @@ const addPriceAndDisplayScore = (products, goldPrice) => {
     };
   });
 };
+
 
 // Tüm ürünleri getir
 const getAllProducts = async (req, res, next) => {
