@@ -4,23 +4,23 @@ const cors = require("cors");
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// CORS ayarını güncelle
+// CORS ayarını düzelt - gerçek URL'nizi yazın
 app.use(cors({
     origin: [
         "http://localhost:3000",
-        "https://your-frontend-domain.vercel.app"  // Vercel frontend URL'nizi buraya ekleyin
+        "https://case-study-olive.vercel.app"  // Gerçek Vercel URL'niz
     ],
     credentials: true
 }));
 
-app.use(express.json()); // Bu satır eksik olabilir
+app.use(express.json());
 
 //Routes
 const productRoutes = require("./routes/routes");
 const errorHandler = require("./middlewares/errorHandler");
 app.use("/products", productRoutes);
 
-app.use(errorHandler); // Bu satır routes'tan sonra olmalı
+app.use(errorHandler);
 
 app.listen(PORT, () => {
     console.log(`Server running on http://localhost:${PORT}`);
