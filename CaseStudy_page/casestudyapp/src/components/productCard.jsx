@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./ProductCard.css";
+import "./productCard.css";
 
 const ProductCard = ({ product }) => {
   const [selectedColor, setSelectedColor] = useState("yellow");

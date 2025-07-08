@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
 import ProductCard from './productCard';
-import './ProductList.css';
+import './productList.css';
 
 const ProductList = () => {
   const [products, setProducts] = useState([]);
@@ -14,22 +14,24 @@ const ProductList = () => {
   const scrollContainerRef = useRef(null);
 
   useEffect(() => {
-    axios.get('http://localhost:5000/products')
-      .then((res) => {
-        setProducts(res.data);
-        setFilteredProducts(res.data);
-        setLoading(false);
-      })
-      .catch((err) => {
+    const fetchProducts = async () => {
+      try {
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/products`);
+        setProducts(response.data);
+        setFilteredProducts(response.data);
+      } catch (err) {
         console.error('Veriler alınamadı:', err);
+      } finally {
         setLoading(false);
-      });
+      }
+    };
+
+    fetchProducts();
   }, []);
 
   useEffect(() => {
     let updated = [...products];
 
-    // Popularity yıldız olarak filtreleniyor (0-5 arası)
     if (popularityFilter !== 'all') {
       updated = updated.filter(product => {
         const stars = product.popularityScore * 5;
@@ -40,7 +42,6 @@ const ProductList = () => {
       });
     }
 
-    // PriceUSD filtreleme
     if (priceFilter !== 'all') {
       updated = updated.filter(product => {
         const price = product.priceUSD;
@@ -54,26 +55,24 @@ const ProductList = () => {
     setFilteredProducts(updated);
   }, [popularityFilter, priceFilter, products]);
 
-  
   const scrollLeft = () => {
     scrollContainerRef.current.scrollBy({
       left: -300,
-      behavior: 'smooth'
+      behavior: 'smooth',
     });
   };
 
   const scrollRight = () => {
     scrollContainerRef.current.scrollBy({
       left: 300,
-      behavior: 'smooth'
+      behavior: 'smooth',
     });
   };
 
   return (
     <div className="product-list-wrapper">
-      <div className='heading'>Product List</div>
+      <div className="heading">Product List</div>
 
-      {/* Filtre Alanı */}
       <div className="filters">
         <div>
           <label>Popularity:</label>
