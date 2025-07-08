@@ -1,0 +1,23 @@
+/* === Avenir Book === */
+@font-face {
+  font-family: "Avenir Book";
+  src: url("./avenir/Avenir-Book.ttf");
+  font-weight: 400;
+  font-style: normal;
+}
+
+/* === Montserrat Medium === */
+@font-face {
+  font-family: "Montserrat Medium";
+  src: url("./montserat/Montserrat-Medium.otf");
+  font-weight: 500;
+  font-style: normal;
+}
+
+/* === Montserrat Regular === */
+@font-face {
+  font-family: "Montserrat Regular";
+  src: url("./montserat/Montserrat-Regular.ttf");
+  font-weight: 400;
+  font-style: normal;
+}

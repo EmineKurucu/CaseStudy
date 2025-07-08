@@ -1,0 +1,183 @@
+.product-card {
+  background-color: transparent; /*arka planla bütünleişk bir yapı sağladık */ 
+  padding: 75px;
+  margin: 0 10px;                 
+  max-width: 230px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  transition: transform 0.3s ease;
+  
+}
+
+
+.product-image {
+  width: 260px;
+  height: 270px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 24px;
+  background-color: transparent;
+  box-shadow: 0 10px 10px rgba(0, 0, 0, 0.08);
+  border-radius: 20px;
+}
+
+
+.product-image img {
+  max-width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 20px;
+}
+
+
+.product-info {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* Sol hizalama */
+  text-align: left;
+}
+
+.product-title {
+  font-family :"Montserrat Medium";
+  font-size: 15px;
+  margin: 0 0 8px 0;
+}
+
+.product-price {
+  font-family: "Montserrat Regular";
+  font-size: 15px;
+  margin: 0 0 12px 0;
+  color: black; 
+  text-align: left;
+}
+
+
+
+.color-options {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 8px;
+  margin: 4px 0;
+}
+
+.color-option {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 3px solid #fff;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.color-option:hover {
+  transform: scale(1.1);
+}
+
+.color-option.selected {
+  border-color: #ffffff;
+  box-shadow: 0 0 0 1px rgb(0, 0, 0);
+}
+
+.color-label {
+  font-family: "Avenir Book";
+  font-size: 12px;
+  margin: 2px 0 6px 0;
+}
+
+.rating {
+  font-family: "Avenir Book";
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  margin: 0;
+}
+
+.star {
+  font-size: 14px;
+  color: #ccc;
+  position: relative;
+  display: inline-block;
+  width: 1em;
+}
+
+.star.filled {
+  color: #ffa500;
+}
+
+.star.half {
+  color: #ccc;
+}
+
+.star.half::before {
+  content: '★';
+  color: #ffa500;
+  position: absolute;
+  left: 0;
+  width: 50%;
+  overflow: hidden;
+  display: inline-block;
+}
+
+.rating-text {
+  font-family: "Avenir Book";
+  font-size: 14px;
+  color: black;
+  margin-left: 4px;
+}
+
+/* Tablet için */
+@media (max-width: 640px) {
+  .product-card {
+    padding: 30px;
+    max-width: 180px;
+  }
+  .product-image {
+    width: 160px;
+    height: 170px;
+  }
+  .heading {
+    font-size: 28px;
+  }
+  .filters {
+    flex-direction: column;
+    gap: 10px;
+    align-items: flex-start;
+  }
+}
+
+/* Telefon için */
+@media (max-width: 480px) {
+  .product-card {
+    padding: 10px;
+    max-width: 120px;
+  }
+  .product-image {
+    width: 100px;
+    height: 110px;
+  }
+  .heading {
+    font-size: 18px;
+    margin: 2rem 0 1rem 0;
+  }
+  .filters {
+    gap: 5px;
+    font-size: 12px;
+  }
+  .product-scroll-container {
+    gap: 0.3rem;
+  }
+  .scroll-button.left,
+  .scroll-button.right {
+    top: 10%;
+    font-size: 18px;
+    width: 24px;
+    height: 24px;
+  }
+}
